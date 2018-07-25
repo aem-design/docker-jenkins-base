@@ -19,7 +19,7 @@ ARG CHROME_FILE="google-chrome-stable_current_x86_64.rpm"
 ARG CHROME_URL="https://dl.google.com/linux/direct/${CHROME_FILE}"
 ARG NODE_VERSION="10.2.1"
 ARG NVM_VERSION="v0.33.11"
-ARG NVM_URL="https://raw.githubusercontent.com/creationix/nvm/${NVM_VERSION}/install.sh
+ARG NVM_URL="https://raw.githubusercontent.com/creationix/nvm/${NVM_VERSION}/install.sh"
 
 ENV JENKINS_HOME="/var/jenkins_home" \
     JENKINS_PORT=8080 \
