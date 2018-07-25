@@ -1,0 +1,19 @@
+jenkins-base:
+  build: .
+  labels:
+    os.version: "centos"
+    java.version: "open jdk 8"
+    container.description: "extended Jenkins image to allow configuration during image build"
+  container_name: "jenkins-base"
+  ports:
+   - "8080:8080"
+   - "50000:50000"
+  environment:
+    - JAVA_OPTS="-Djava.awt.headless=true"
+    - JENKINS_HOME=/var/jenkins_home
+    - JENKINS_SLAVE_AGENT_PORT=50000
+#  volumes:
+#   - /var/jenkins_home:/var/jenkins_home
+  volumes_from:
+    - jenkins-data
+
