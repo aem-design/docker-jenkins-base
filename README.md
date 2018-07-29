@@ -1,5 +1,7 @@
 ## CentOS 7 with Jenkins Base
 
+[![pipeline status](https://gitlab.com/aem.design/jenkins-base/badges/master/pipeline.svg)](https://gitlab.com/aem.design/jenkins-base/commits/master)
+
 This is docker image based on [aemdesign/oracle-jdk](https://hub.docker.com/r/aemdesign/oracle-jdk/) with Jenkins and build pack integrated
 
 One image for Jenkins Master, Slave and build agent
