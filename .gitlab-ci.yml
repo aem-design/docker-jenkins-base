@@ -4,9 +4,9 @@ services:
 
 stages:
 - build
-#- test
+- test
 - release
-#- deploy
+- trigger
 
 variables:
   DOCKER_HOST: tcp://docker:2375
@@ -16,25 +16,17 @@ variables:
 
 before_script:
   - docker login -u "$CI_REGISTRY_USER" -p "$CI_REGISTRY_PASSWORD" $CI_REGISTRY
-#  - docker login -u gitlab-ci-token -p $CI_JOB_TOKEN registry.example.com
 
 build:
   stage: build
   script:
     - docker build --pull -t "$CONTAINER_TEST_IMAGE" .
     - docker push "$CONTAINER_TEST_IMAGE"
-#
-#test1:
-#  stage: test
-#  script:
-#    - docker pull $CONTAINER_TEST_IMAGE
-#    - docker run $CONTAINER_TEST_IMAGE /script/to/run/tests
-#
-#test2:
-#  stage: test
-#  script:
-#    - docker pull $CONTAINER_TEST_IMAGE
-#    - docker run $CONTAINER_TEST_IMAGE /script/to/run/another/test
+
+test:
+  stage: test
+  script:
+    - docker run $CONTAINER_TEST_IMAGE ls -l
 
 release-image:
   stage: release
@@ -44,10 +36,9 @@ release-image:
     - docker push "$CONTAINER_RELEASE_IMAGE"
   only:
     - master
-#
-#deploy:
-#  stage: deploy
-#  script:
-#    - ./deploy.sh
-#  only:
-#    - master
+
+trigger_build:
+  stage: trigger
+  script:
+    - echo "Build jenkins"
+    - docker run appropriate/curl curl -X POST -F "token=d82167ebc63d371e608f582cd5c3f3" -F "ref=$CI_COMMIT_REF_NAME" https://gitlab.com/api/v4/projects/7623215/trigger/pipeline
