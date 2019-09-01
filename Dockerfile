@@ -9,19 +9,20 @@ LABEL   os="centos" \
         version="1.0.0" \
         imagename="jenkins-base" \
         test.command=" java -version 2>&1 | grep 'java version' | sed -e 's/.*java version "\(.*\)".*/\1/'" \
-        test.command.verify="1.8"
+        test.command.verify="11.0.4"
 
 
 ARG JENKINS_VERSION="2.134"
 ARG JENKINS_URL="https://repo.jenkins-ci.org/public/org/jenkins-ci/main/jenkins-war/${JENKINS_VERSION}/jenkins-war-${JENKINS_VERSION}.war"
 ARG PYCURL_SSL_LIBRARY="nss"
-ARG CHROME_DRIVER_VERSION="2.38"
+#https://chromedriver.storage.googleapis.com/
+ARG CHROME_DRIVER_VERSION="77.0.3865.40"
 ARG CHROME_DRIVER_FILE="chromedriver_linux64.zip"
 ARG CHROME_DRIVER_URL="https://chromedriver.storage.googleapis.com/${CHROME_DRIVER_VERSION}/${CHROME_DRIVER_FILE}"
 ARG CHROME_FILE="google-chrome-stable_current_x86_64.rpm"
 ARG CHROME_URL="https://dl.google.com/linux/direct/${CHROME_FILE}"
 ARG NODE_VERSION="10.2.1"
-ARG NVM_VERSION="v0.33.11"
+ARG NVM_VERSION="v0.34.0"
 ARG NVM_URL="https://raw.githubusercontent.com/creationix/nvm/${NVM_VERSION}/install.sh"
 
 ENV JENKINS_HOME="/var/jenkins_home" \
