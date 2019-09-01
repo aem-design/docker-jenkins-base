@@ -2,12 +2,15 @@ FROM        aemdesign/oracle-jdk:latest
 
 MAINTAINER  devops <devops@aem.design>
 
-LABEL   app.version="2" \
-        os.version="centos" \
-        java.version="oracle jdk 8" \
+LABEL   os="centos" \
         docker.source="https://hub.docker.com/_/jenkins/" \
         docker.dockerfile="https://github.com/jenkinsci/docker/blob/master/Dockerfile" \
-        container.description="extended Jenkins Base and remove Volume Mount"
+        container.description="extended Jenkins Base and remove Volume Mount" \
+        version="1.0.0" \
+        imagename="jenkins-base" \
+        test.command=" java -version 2>&1 | grep 'java version' | sed -e 's/.*java version "\(.*\)".*/\1/'" \
+        test.command.verify="1.8"
+
 
 ARG JENKINS_VERSION="2.134"
 ARG JENKINS_URL="https://repo.jenkins-ci.org/public/org/jenkins-ci/main/jenkins-war/${JENKINS_VERSION}/jenkins-war-${JENKINS_VERSION}.war"
