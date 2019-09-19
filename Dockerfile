@@ -55,7 +55,7 @@ RUN \
     easy_install pip setuptools && pip install --upgrade --ignore-installed pyudev rtslib-fb && \
     export PYCURL_SSL_LIBRARY=${PYCURL_SSL_LIBRARY} && pip install --upgrade --ignore-installed pycurl && \
     pip install --upgrade --ignore-installed pycrypto BeautifulSoup4 xmltodict paramiko PyYAML Jinja2 httplib2 boto xmltodict six requests python-consul passlib cryptography appdirs packaging boto ansible 'docker-compose<1.20.0' 'docker<3.0' awscli ansible && \
-    pip install https://github.com/wildone/pyaem/archive/master.zip && \
+    pip install pyaem2 && \
     yum clean all && rm -rf /var/lib/yum/* /tmp/* /var/tmp/* && \
     chmod u=rwx /usr/local/bin/install-plugins.sh && chmod u=rwx /usr/local/bin/jenkins-support && \
     chown -R ${JENKINS_USER} ${JENKINS_HOME} && chown -R ${JENKINS_USER} /usr/share/$JENKINS_USER/ && \
