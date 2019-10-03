@@ -8,7 +8,7 @@ LABEL   os="centos" \
         container.description="extended Jenkins Base and remove Volume Mount" \
         version="1.0.0" \
         imagename="jenkins-base" \
-        test.command=" java -version 2>&1 | grep 'java version' | sed -e 's/.*java version "\(.*\)".*/\1/'" \
+        test.command=" java -version 2>&1 | grep 'java version' | sed -e 's/.*java version \"\(.*\)\".*/\1/'" \
         test.command.verify="1.8"
 
 
