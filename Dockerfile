@@ -9,7 +9,7 @@ LABEL   os="centos" \
         version="1.0.0" \
         imagename="jenkins-base" \
         test.command=" java -version 2>&1 | grep 'java version' | sed -e 's/.*java version "\(.*\)".*/\1/'" \
-        test.command.verify="11.0.4"
+        test.command.verify="1.8"
 
 
 ARG JENKINS_VERSION="2.176.3"
