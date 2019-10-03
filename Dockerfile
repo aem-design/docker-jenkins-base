@@ -46,17 +46,88 @@ COPY tcp-slave-agent-port.groovy jenkins-slave-count.groovy /usr/share/$JENKINS_
 COPY jenkins.sh install-plugins.sh jenkins-support /usr/local/bin/
 
 RUN \
-    groupadd -g ${JENKINS_GUID} ${JENKINS_GROUP} && useradd -d "$JENKINS_HOME" -u ${JENKINS_UID} -g ${JENKINS_GUID} -m -s /bin/bash ${JENKINS_USER} && echo "$JENKINS_USER ALL=NOPASSWD: ALL" >> /etc/sudoers && \
-    mkdir -p /usr/share/$JENKINS_USER/ref/init.groovy.d && mkdir -p /var/run/sshd && mkdir -p /usr/share/$JENKINS_USER/ref/plugins && \
-    JENKINS_MD5=$(curl -L ${JENKINS_URL}.md5) && curl -fL ${JENKINS_URL} -o /usr/share/$JENKINS_USER/jenkins.war && echo "$JENKINS_MD5 /usr/share/$JENKINS_USER/jenkins-war-${JENKINS_VERSION}.war" >> MD5SUM  && \
-    yum update -y && yum install -y epel-release && yum install -y curl tar zip unzip maven ruby groovy ivy junit rsync python-setuptools autoconf gcc-c++ make gcc python-devel openssl-devel openssh-server vim git wget bzip2 ca-certificates chrpath fontconfig freetype libfreetype.so.6 libfontconfig.so.1 libstdc++.so.6 ImageMagick ImageMagick-devel libcurl-devel libffi libffi-devel libtool-ltdl libtool-ltdl-devel && \
+    YUM_PACKAGES="curl \
+        tar \
+        zip \
+        unzip \
+        maven \
+        ruby \
+        groovy \
+        ivy \
+        junit \
+        rsync \
+        python-setuptools \
+        autoconf \
+        gcc-c++ \
+        make \
+        gcc \
+        python-devel \
+        openssl-devel \
+        openssh-server \
+        vim \
+        git \
+        wget \
+        bzip2 \
+        ca-certificates \
+        chrpath \
+        fontconfig \
+        freetype \
+        libfreetype.so.6 \
+        libfontconfig.so.1 \
+        libstdc++.so.6 \
+        ImageMagick \
+        ImageMagick-devel \
+        libcurl-devel \
+        libffi \
+        libffi-devel \
+        libtool-ltdl \
+        libtool-ltdl-devel" && \
+    PIP_PACKAGES=" \
+        pycrypto \
+        BeautifulSoup4 \
+        xmltodict \
+        paramiko \
+        PyYAML \
+        Jinja2 \
+        httplib2 \
+        boto \
+        xmltodict \
+        six \
+        requests \
+        python-consul \
+        passlib \
+        cryptography \
+        appdirs \
+        packaging \
+        boto \
+        docker-compose \
+        docker \
+        awscli \
+        ansible \
+        pyaem2" && \
+    echo "==> Update YUM Packages..." && \
+    yum update -y && yum install -y epel-release && yum install -y ${YUM_PACKAGES} && \
+    echo "==> Install GIT and LFS..." && \
     curl -s https://packagecloud.io/install/repositories/github/git-lfs/script.rpm.sh | bash && yum install -y git-lfs && git lfs install && \
+    echo "==> Install SDKMAN and GRADLE..." && \
     curl -s "https://get.sdkman.io" | bash && source "/root/.sdkman/bin/sdkman-init.sh" && sdk install gradle && \
+    echo "==> Install PIP Packages..." && \
     easy_install pip setuptools && pip install --upgrade --ignore-installed pyudev rtslib-fb && \
     export PYCURL_SSL_LIBRARY=${PYCURL_SSL_LIBRARY} && pip install --upgrade --ignore-installed pycurl && \
-    pip install --upgrade --ignore-installed pycrypto BeautifulSoup4 xmltodict paramiko PyYAML Jinja2 httplib2 boto xmltodict six requests python-consul passlib cryptography appdirs packaging boto ansible 'docker-compose<1.20.0' 'docker<3.0' awscli ansible && \
-    pip install pyaem2 && \
+    pip install --upgrade --ignore-installed ${PIP_PACKAGES}  && \
+    echo "==> Cleanup..." && \
     yum clean all && rm -rf /var/lib/yum/* /tmp/* /var/tmp/* && \
+    echo "==> Config Jenkins ..." && \
+    groupadd -g ${JENKINS_GUID} ${JENKINS_GROUP} && \
+    useradd -d "$JENKINS_HOME" -u ${JENKINS_UID} -g ${JENKINS_GUID} -m -s /bin/bash ${JENKINS_USER} && \
+    echo "$JENKINS_USER ALL=NOPASSWD: ALL" >> /etc/sudoers && \
+    mkdir -p /usr/share/$JENKINS_USER/ref/init.groovy.d && \
+    mkdir -p /var/run/sshd && \
+    mkdir -p /usr/share/$JENKINS_USER/ref/plugins && \
+    JENKINS_MD5=$(curl -L ${JENKINS_URL}.md5) && \
+    curl -fL ${JENKINS_URL} -o /usr/share/$JENKINS_USER/jenkins.war && \
+    echo "$JENKINS_MD5 /usr/share/$JENKINS_USER/jenkins-war-${JENKINS_VERSION}.war" >> MD5SUM  && \
+    echo "==> Setup Jenkins Plugins..." && \
     chmod u=rwx /usr/local/bin/install-plugins.sh && chmod u=rwx /usr/local/bin/jenkins-support && \
     chown -R ${JENKINS_USER} ${JENKINS_HOME} && chown -R ${JENKINS_USER} /usr/share/$JENKINS_USER/ && \
     chmod +x /usr/local/bin/jenkins.sh /usr/local/bin/install-plugins.sh /usr/local/bin/jenkins-support
