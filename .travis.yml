@@ -6,6 +6,9 @@ services:
   - 'docker'
 
 before_install:
+  - curl https://raw.githubusercontent.com/aem-design/aemdesign-docker/master/scripts/travis/container_verify.sh
+  - curl https://raw.githubusercontent.com/aem-design/aemdesign-docker/master/scripts/travis/get_config.sh
+  - curl https://raw.githubusercontent.com/aem-design/aemdesign-docker/master/scripts/travis/get_version.sh
   - source <(curl -s https://raw.githubusercontent.com/aem-design/aemdesign-docker/master/scripts/travis/get_config.sh)
   - source <(curl -s https://raw.githubusercontent.com/aem-design/aemdesign-docker/master/scripts/travis/get_version.sh)
 
