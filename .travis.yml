@@ -6,14 +6,14 @@ services:
   - 'docker'
 
 before_install:
-  - source <(curl -s https://raw.githubusercontent.com/aem-design/aemdesign-docker/master/scripts/travis/get_config.sh)
-  - source <(curl -s https://raw.githubusercontent.com/aem-design/aemdesign-docker/master/scripts/travis/get_version.sh)
+  - "source <(curl -s -H 'Cache-Control: no-cache' https://raw.githubusercontent.com/aem-design/aemdesign-docker/master/scripts/travis/get_config.sh?`date +%s`)"
+  - "source <(curl -s -H 'Cache-Control: no-cache' https://raw.githubusercontent.com/aem-design/aemdesign-docker/master/scripts/travis/get_version.sh?`date +%s`)"
 
 
 #build and test
 install:
   - docker build --pull -t $IMAGE:$IMAGE_VERSION .
-  - "source <(curl -s -H 'Cache-Control: no-cache' https://raw.githubusercontent.com/aem-design/aemdesign-docker/master/scripts/travis/container_verify.sh?{{  lookup('pipe', 'date +%s') }})"
+  - "source <(curl -s -H 'Cache-Control: no-cache' https://raw.githubusercontent.com/aem-design/aemdesign-docker/master/scripts/travis/container_verify.sh?`date +%s`)"
   - docker image
 
 #test
