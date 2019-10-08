@@ -12,9 +12,10 @@ before_install:
 
 #build and test
 install:
+  - docker images
   - docker build --pull -t $IMAGE:$IMAGE_VERSION .
+  - docker images
   - "source <(curl -sL https://github.com/aem-design/aemdesign-docker/releases/latest/download/container_verify.sh)"
-  - docker image
 
 #test
 script:
