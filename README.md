@@ -1,6 +1,6 @@
 ## CentOS 7 with Jenkins Base
 
-[![build_status](https://travis-ci.org/aem-design/jenkins-base.svg?branch=master)](https://travis-ci.org/aem-design/jenkins-base) 
+[![build_status](https://travis-ci.org/aem-design/docker-jenkins-base.svg?branch=master)](https://travis-ci.org/aem-design/docker-jenkins-base) 
 [![github license](https://img.shields.io/github/license/aem-design/jenkins-base)](https://github.com/aem-design/jenkins-base) 
 [![github issues](https://img.shields.io/github/issues/aem-design/jenkins-base)](https://github.com/aem-design/jenkins-base) 
 [![github last commit](https://img.shields.io/github/last-commit/aem-design/jenkins-base)](https://github.com/aem-design/jenkins-base) 
