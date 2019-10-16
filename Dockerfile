@@ -12,7 +12,7 @@ LABEL   os="centos" \
         test.command.verify="1.8"
 
 
-ARG JENKINS_VERSION="2.176.3"
+ARG JENKINS_VERSION="2.190.1"
 ARG JENKINS_URL="https://repo.jenkins-ci.org/public/org/jenkins-ci/main/jenkins-war/${JENKINS_VERSION}/jenkins-war-${JENKINS_VERSION}.war"
 ARG PYCURL_SSL_LIBRARY="nss"
 #https://chromedriver.storage.googleapis.com/
