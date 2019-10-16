@@ -43,7 +43,7 @@ ENV JENKINS_HOME="/var/jenkins_home" \
     NODE_VERSION="${NODE_VERSION}"
 
 COPY tcp-slave-agent-port.groovy jenkins-slave-count.groovy /usr/share/$JENKINS_USER/ref/init.groovy.d/
-COPY jenkins.sh install-plugins.sh jenkins-support /usr/local/bin/
+COPY jenkins.sh install-plugins.sh plugins.sh jenkins-support /usr/local/bin/
 
 RUN \
     YUM_PACKAGES="curl \
