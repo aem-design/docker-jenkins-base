@@ -130,7 +130,7 @@ RUN \
     echo "==> Setup Jenkins Plugins..." && \
     chmod u=rwx /usr/local/bin/install-plugins.sh && chmod u=rwx /usr/local/bin/jenkins-support && \
     chown -R ${JENKINS_USER} ${JENKINS_HOME} && chown -R ${JENKINS_USER} /usr/share/$JENKINS_USER/ && \
-    chmod +x /usr/local/bin/jenkins.sh /usr/local/bin/install-plugins.sh /usr/local/bin/jenkins-support &&
+    chmod +x /usr/local/bin/jenkins.sh /usr/local/bin/install-plugins.sh /usr/local/bin/jenkins-support && \
     echo "==> Set Oracle JDK as Alternative..." && \
     alternatives --install "/usr/bin/java" "java" "/usr/java/default/bin/java" 2 && \
     alternatives --install "/usr/bin/jar" "jar" "/usr/java/default/bin/jar" 2 && \
