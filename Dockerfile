@@ -25,6 +25,8 @@ ARG NODE_VERSION="10.2.1"
 ARG NVM_VERSION="v0.34.0"
 ARG NVM_URL="https://raw.githubusercontent.com/creationix/nvm/${NVM_VERSION}/install.sh"
 
+RUN echo Dowloading Jenkins v$JENKINS_VERSION
+
 ENV JENKINS_HOME="/var/jenkins_home" \
     JENKINS_PORT=8080 \
     JENKINS_SLAVE_AGENT_PORT=50000 \
