@@ -8,12 +8,15 @@ services:
 before_install:
   - "source <(curl -sL https://github.com/aem-design/aemdesign-docker/releases/latest/download/get_config.sh)"
   - "source <(curl -sL https://github.com/aem-design/aemdesign-docker/releases/latest/download/get_version.sh)"
+  - export JENKINS_VERSION=$(wget -q -O - http://mirrors.jenkins.io/war-stable/ | xmllint --html --xpath "//table/tr[position() = (last() - 2)]/td[2]/a/text()" - | sed -e 's/[^0-9\.]//g')
+  - export RELEASE_DATE=$(wget -q -O - http://mirrors.jenkins.io/war-stable/ | xmllint --html --xpath "//table/tr[position() = (last() - 2)]/td[3]/text()" - | sed -n 's/\([0-9]\{4\}-[0-9]\{2\}-[0-9]\{2\}\).*/\1/p')
+  - export TODAY=$(date "+%Y-%m-%d")
 
 
 #build and test
 install:
   - docker images
-  - docker build --pull -t $IMAGE:$IMAGE_VERSION .
+  - docker build --pull -t $IMAGE:$IMAGE_VERSION --build-arg JENKINS_VERSION=$JENKINS_VERSION .
   - docker images
   - "source <(curl -sL https://github.com/aem-design/aemdesign-docker/releases/latest/download/container_verify.sh)"
 
