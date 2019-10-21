@@ -11,6 +11,7 @@ before_install:
   - export JENKINS_VERSION=$(wget -q -O - http://mirrors.jenkins.io/war-stable/ | xmllint --html --xpath "//table/tr[position() = (last() - 2)]/td[2]/a/text()" - | sed -e 's/[^0-9\.]//g')
   - export RELEASE_DATE=$(wget -q -O - http://mirrors.jenkins.io/war-stable/ | xmllint --html --xpath "//table/tr[position() = (last() - 2)]/td[3]/text()" - | sed -n 's/\([0-9]\{4\}-[0-9]\{2\}-[0-9]\{2\}\).*/\1/p')
   - export TODAY=$(date "+%Y-%m-%d")
+  - declare -a REPO_SLUG_ARRAY="(${TRAVIS_REPO_SLUG/\// })"
 
 
 #build and test
@@ -38,12 +39,14 @@ before_deploy:
 
 ## Create release in GitHub
 deploy:
-  provider: releases
-  tag_name: $TRAVIS_TAG
-  name: $TRAVIS_TAG
-  target_commitish: $TRAVIS_COMMIT
-  api_key: $GITHUB_TOKEN
-  skip_cleanup: true
-  on:
-    branch: master
-    condition: $RELEASE_DATE = $TODAY
+  - provider: releases
+    tag_name: $TRAVIS_TAG
+    name: $TRAVIS_TAG
+    target_commitish: $TRAVIS_COMMIT
+    api_key: $GITHUB_TOKEN
+    skip_cleanup: true
+    on:
+      branch: master
+      condition: $RELEASE_DATE = $TODAY
+  - provider: script
+    script: if [[ $TRAVIS_BRANCH == "master" ]]; then bash docker run --rm aemdesign/travis-trigger-build start-branch-build --github_user=${REPO_SLUG_ARRAY[0]} --github_repo=docker-jenkins --github_branch=${TRAVIS_BRANCH} --travis_token=${TRAVIS_TOKEN}; fi
