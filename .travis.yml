@@ -6,7 +6,7 @@ services:
   - 'docker'
 
 before_install:
-  - sudo apt-get -y install libxml2-dev
+  - sudo apt-get -y install libxml2-utils
   - "source <(curl -sL https://github.com/aem-design/aemdesign-docker/releases/latest/download/get_config.sh)"
   - "source <(curl -sL https://github.com/aem-design/aemdesign-docker/releases/latest/download/get_version.sh)"
   - export JENKINS_VERSION=$(wget -q -O - http://mirrors.jenkins.io/war-stable/ | xmllint --html --xpath "//table/tr[position() = (last() - 2)]/td[2]/a/text()" - | sed -e 's/[^0-9\.]//g')
