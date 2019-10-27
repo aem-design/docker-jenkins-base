@@ -6,6 +6,7 @@ services:
   - 'docker'
 
 before_install:
+  - sudo apt-get -y install libxml2-dev
   - "source <(curl -sL https://github.com/aem-design/aemdesign-docker/releases/latest/download/get_config.sh)"
   - "source <(curl -sL https://github.com/aem-design/aemdesign-docker/releases/latest/download/get_version.sh)"
   - export JENKINS_VERSION=$(wget -q -O - http://mirrors.jenkins.io/war-stable/ | xmllint --html --xpath "//table/tr[position() = (last() - 2)]/td[2]/a/text()" - | sed -e 's/[^0-9\.]//g')
@@ -47,6 +48,5 @@ deploy:
     skip_cleanup: true
     on:
       branch: master
-      condition: $RELEASE_DATE = $TODAY
   - provider: script
     script: if [[ $TRAVIS_BRANCH == "master" ]]; then bash docker run --rm aemdesign/travis-trigger-build start-branch-build --github_user=${REPO_SLUG_ARRAY[0]} --github_repo=docker-jenkins --github_branch=${TRAVIS_BRANCH} --travis_token=${TRAVIS_TOKEN}; fi
