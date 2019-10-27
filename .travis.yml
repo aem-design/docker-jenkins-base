@@ -17,7 +17,6 @@ before_install:
 
 #build and test
 install:
-  - docker images
   - docker build --pull -t $IMAGE:$IMAGE_VERSION --build-arg JENKINS_VERSION=$JENKINS_VERSION .
   - docker images
   - "source <(curl -sL https://github.com/aem-design/aemdesign-docker/releases/latest/download/container_verify.sh)"
@@ -34,7 +33,8 @@ script:
 
 ## Get the project version
 before_deploy:
-  - if [[ $TRAVIS_BRANCH == "master" ]]; then git tag $TRAVIS_TAG; fi
+  - echo "skipping before_deploy"
+#  - if [[ $TRAVIS_BRANCH == "master" ]]; then git tag $TRAVIS_TAG; fi
 
 ## Create release in GitHub
 deploy:
