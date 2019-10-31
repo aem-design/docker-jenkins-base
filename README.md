@@ -1,4 +1,4 @@
-## CentOS 7 with Jenkins Base
+## CentOS 7 with Jenkins CASC
 
 [![build_status](https://travis-ci.org/aem-design/docker-jenkins-base.svg?branch=master)](https://travis-ci.org/aem-design/docker-jenkins-base) 
 [![github license](https://img.shields.io/github/license/aem-design/jenkins-base)](https://github.com/aem-design/jenkins-base) 
@@ -9,7 +9,7 @@
 [![docker pulls](https://img.shields.io/docker/pulls/aemdesign/jenkins-base)](https://hub.docker.com/r/aemdesign/jenkins-base) 
 [![github release](https://img.shields.io/github/release/aem-design/jenkins-base)](https://github.com/aem-design/jenkins-base)
 
-This is docker image based on [aemdesign/oracle-jdk](https://hub.docker.com/r/aemdesign/oracle-jdk/) with Jenkins and build pack integrated
+This is docker image based on [aemdesign/oracle-jdk](https://hub.docker.com/r/aemdesign/oracle-jdk/) with Jenkins CASC and build pack integrated
 
 One image for Jenkins Master, Slave and build agent
 
