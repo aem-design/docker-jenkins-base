@@ -22,5 +22,65 @@ Following is the list of packages included
 * maven                 - for managing of builds
 * python                - for ansible playbooks
 * chrome                - for headless tests
+* groovy                - for pipeline creation
 * jenkins               - for managing pipelines
 
+### Configured Plugins
+| Plugin Name | Version |
+|------------------------------------|------------|
+| ace-editor| latest |
+| apache-httpcomponents-client-4-api| latest |
+| authentication-tokens| latest |
+| branch-api| latest |
+| cloudbees-folder| latest |
+| credentials-binding| latest |
+| credentials| latest |
+| display-url-api| latest |
+| docker-commons| latest |
+| docker-workflow| latest |
+| durable-task| latest |
+| git-client| latest |
+| git-server| latest |
+| git| latest |
+| jackson2-api| latest |
+| job-dsl| 1.74 |
+| jquery-detached| latest |
+| jsch| latest |
+| junit| latest |
+| mailer| latest |
+| matrix-project| latest |
+| pipeline-input-step| latest |
+| pipeline-model-api| latest |
+| pipeline-model-declarative-agent| latest |
+| pipeline-model-definition| latest |
+| pipeline-model-extensions| latest |
+| pipeline-stage-step| latest |
+| pipeline-stage-tags-metadata| latest |
+| pipeline-utility-steps| latest |
+| plain-credentials| latest |
+| scm-api| latest |
+| script-security| latest |
+| ssh-credentials| latest |
+| structs| latest |
+| trilead-api| latest |
+| workflow-api| latest |
+| workflow-basic-steps| latest |
+| workflow-cps-global-lib| latest |
+| workflow-cps| latest |
+| workflow-durable-task-step| latest |
+| workflow-job| latest |
+| workflow-multibranch| latest |
+| workflow-scm-step| latest |
+| workflow-step-api| latest |
+| workflow-support| latest |
+| configuration-as-code| latest |
+| matrix-auth| latest |
+| github-oauth| latest |
+| bitbucket-oauth| latest |
+| google-oauth-plugin| latest |
+
+### Usage
+
+> docker run -v jenkins_home:/var/jenkins_home -v $(pwd)/casc_configs:/var/jenkins_conf -p 8080:8080 aemdesign/jenkins-base
+
+and a sample casc_configs can be found in https://github.com/Praqma/praqma-jenkins-casc
