@@ -13,7 +13,7 @@ LABEL   os="centos" \
 
 # Set default arguments
 ARG JENKINS_VERSION="2.190.1"
-ARG JENKINS_URL="http://mirrors.jenkins.io/war-stable/latest/jenkins.war"
+ARG JENKINS_URL="https://repo.jenkins-ci.org/public/org/jenkins-ci/main/jenkins-war/${JENKINS_VERSION}/jenkins-war-${JENKINS_VERSION}.war"
 ARG PYCURL_SSL_LIBRARY="nss"
 #https://chromedriver.storage.googleapis.com/
 ARG CHROME_DRIVER_VERSION="77.0.3865.40"
@@ -24,6 +24,7 @@ ARG CHROME_URL="https://dl.google.com/linux/direct/${CHROME_FILE}"
 ARG NODE_VERSION="10.2.1"
 ARG NVM_VERSION="v0.34.0"
 ARG NVM_URL="https://raw.githubusercontent.com/creationix/nvm/${NVM_VERSION}/install.sh"
+ARG REF=/usr/share/jenkins/ref
 
 RUN echo Dowloading Jenkins v$JENKINS_VERSION
 
@@ -42,10 +43,13 @@ ENV JENKINS_HOME="/var/jenkins_home" \
     CHROME_DRIVER_VERSION=${CHROME_DRIVER_VERSION} \
     NODE_VERSION=${NODE_VERSION} \
     NVM_DIR="${JENKINS_HOME}/.nvm" \
-    NODE_VERSION="${NODE_VERSION}"
+    NODE_VERSION="${NODE_VERSION}" \
+    REF="${REF}"
 
 COPY tcp-slave-agent-port.groovy jenkins-slave-count.groovy /usr/share/$JENKINS_USER/ref/init.groovy.d/
 COPY jenkins.sh install-plugins.sh plugins.sh jenkins-support /usr/local/bin/
+
+RUN mkdir -p ${REF}/init.groovy.d
 
 RUN \
     YUM_PACKAGES="curl \
@@ -102,8 +106,6 @@ RUN \
         appdirs \
         packaging \
         boto \
-        docker-compose \
-        docker \
         awscli \
         ansible \
         pyaem2" && \
@@ -118,22 +120,29 @@ RUN \
     export PYCURL_SSL_LIBRARY=${PYCURL_SSL_LIBRARY} && pip install --upgrade --ignore-installed pycurl && \
     pip install --upgrade --ignore-installed ${PIP_PACKAGES}  && \
     echo "==> Cleanup..." && \
-    yum clean all && rm -rf /var/lib/yum/* /tmp/* /var/tmp/* && \
-    echo "==> Config Jenkins ..." && \
+    yum clean all && rm -rf /var/lib/yum/* /tmp/* /var/tmp/*
+RUN echo "==> Creating user/group" && \
     groupadd -g ${JENKINS_GUID} ${JENKINS_GROUP} && \
-    useradd -d "$JENKINS_HOME" -u ${JENKINS_UID} -g ${JENKINS_GUID} -m -s /bin/bash ${JENKINS_USER} && \
-    echo "$JENKINS_USER ALL=NOPASSWD: ALL" >> /etc/sudoers && \
+    useradd -d "$JENKINS_HOME" -u ${JENKINS_UID} -g ${JENKINS_GUID} -m -s /bin/bash ${JENKINS_USER}
+
+RUN echo "==> Config Jenkins ..." && \
+    mkdir -p ${JENKINS_HOME} && \
+    chown ${JENKINS_UID}:${JENKINS_GUID} ${JENKINS_HOME}
+
+VOLUME $JENKINS_HOME
+
+RUN echo "$JENKINS_USER ALL=NOPASSWD: ALL" >> /etc/sudoers && \
     mkdir -p /usr/share/$JENKINS_USER/ref/init.groovy.d && \
     mkdir -p /var/run/sshd && \
     mkdir -p /usr/share/$JENKINS_USER/ref/plugins && \
     JENKINS_MD5=$(curl -L ${JENKINS_URL}.md5) && \
     curl -fL ${JENKINS_URL} -o /usr/share/$JENKINS_USER/jenkins.war && \
-    echo "$JENKINS_MD5 /usr/share/$JENKINS_USER/jenkins-war-${JENKINS_VERSION}.war" >> MD5SUM  && \
-    echo "==> Setup Jenkins Plugins..." && \
+    echo "$JENKINS_MD5 /usr/share/$JENKINS_USER/jenkins-war-${JENKINS_VERSION}.war" >> MD5SUM
+RUN echo "==> Setup Jenkins Plugins..." && \
     chmod u=rwx /usr/local/bin/install-plugins.sh && chmod u=rwx /usr/local/bin/jenkins-support && \
     chown -R ${JENKINS_USER} ${JENKINS_HOME} && chown -R ${JENKINS_USER} /usr/share/$JENKINS_USER/ && \
-    chmod +x /usr/local/bin/jenkins.sh /usr/local/bin/install-plugins.sh /usr/local/bin/jenkins-support && \
-    echo "==> Set Oracle JDK as Alternative..." && \
+    chmod +x /usr/local/bin/jenkins.sh /usr/local/bin/install-plugins.sh /usr/local/bin/jenkins-support
+RUN echo "==> Set Oracle JDK as Alternative..." && \
     rm -rf /var/lib/alternatives/java && \
     rm -rf /var/lib/alternatives/jar && \
     rm -rf /var/lib/alternatives/javac && \
@@ -144,6 +153,8 @@ RUN \
     alternatives --set jar "/usr/java/default/bin/jar" && \
     alternatives --set javac "/usr/java/default/bin/javac"
 
+RUN chown -R ${JENKINS_USER} "$JENKINS_HOME" "$REF"
+
 # install chrome
 RUN \
     wget ${CHROME_DRIVER_URL} && unzip ${CHROME_DRIVER_FILE} && cp chromedriver /usr/bin && \
@@ -151,6 +162,10 @@ RUN \
 
 EXPOSE ${JENKINS_PORT} ${JENKINS_SLAVE_AGENT_PORT}
 
+ENV CASC_JENKINS_CONFIG /var/jenkins_conf
+
+COPY plugins_extra.txt /usr/share/jenkins/ref/plugins_extra.txt
+RUN xargs /usr/local/bin/install-plugins.sh < /usr/share/jenkins/ref/plugins_extra.txt
 USER ${JENKINS_USER}
 
 # install node and npm modules
