@@ -47,11 +47,12 @@ ENV JENKINS_HOME="/var/jenkins_home" \
     REF="${REF}"
 
 COPY tcp-slave-agent-port.groovy jenkins-slave-count.groovy /usr/share/$JENKINS_USER/ref/init.groovy.d/
-COPY jenkins.sh install-plugins.sh plugins.sh jenkins-support /usr/local/bin/
+COPY jenkins.sh install-plugins.sh jenkins-support /usr/local/bin/
 
 RUN mkdir -p ${REF}/init.groovy.d
 
-RUN \
+
+RUN echo "==> Update YUM Packages..." && \
     YUM_PACKAGES="curl \
         tar \
         zip \
@@ -62,12 +63,12 @@ RUN \
         ivy \
         junit \
         rsync \
+        python-devel \
         python-setuptools \
         autoconf \
         gcc-c++ \
         make \
         gcc \
-        python-devel \
         openssl-devel \
         openssh-server \
         vim \
@@ -88,6 +89,13 @@ RUN \
         libffi-devel \
         libtool-ltdl \
         libtool-ltdl-devel" && \
+    yum update -y && yum install -y epel-release && yum install -y ${YUM_PACKAGES}
+RUN echo "==> Install GIT and LFS..." && \
+    curl -s https://packagecloud.io/install/repositories/github/git-lfs/script.rpm.sh | bash && yum install -y git-lfs && git lfs install && \
+    echo "==> Install SDKMAN and GRADLE..." && \
+    curl -s "https://get.sdkman.io" | bash && source "/root/.sdkman/bin/sdkman-init.sh" && sdk install gradle
+
+RUN echo "==> Install PIP Packages..." && \
     PIP_PACKAGES=" \
         pycrypto \
         BeautifulSoup4 \
@@ -109,13 +117,6 @@ RUN \
         awscli \
         ansible \
         pyaem2" && \
-    echo "==> Update YUM Packages..." && \
-    yum update -y && yum install -y epel-release && yum install -y ${YUM_PACKAGES} && \
-    echo "==> Install GIT and LFS..." && \
-    curl -s https://packagecloud.io/install/repositories/github/git-lfs/script.rpm.sh | bash && yum install -y git-lfs && git lfs install && \
-    echo "==> Install SDKMAN and GRADLE..." && \
-    curl -s "https://get.sdkman.io" | bash && source "/root/.sdkman/bin/sdkman-init.sh" && sdk install gradle && \
-    echo "==> Install PIP Packages..." && \
     easy_install pip setuptools && pip install --upgrade --ignore-installed pyudev rtslib-fb && \
     export PYCURL_SSL_LIBRARY=${PYCURL_SSL_LIBRARY} && pip install --upgrade --ignore-installed pycurl && \
     pip install --upgrade --ignore-installed ${PIP_PACKAGES}  && \

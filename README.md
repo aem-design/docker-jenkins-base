@@ -13,6 +13,28 @@ This is docker image based on [aemdesign/oracle-jdk](https://hub.docker.com/r/ae
 
 One image for Jenkins Master, Slave and build agent
 
+### Environment Variables
+
+| Variable Name | Default Value | Description |
+|---------------------|-------------|-------------------------------|
+| DOCKER_USERNAME |  |  |
+| DOCKER_PASSWORD |  |  |
+| TRAVIS_TOKEN |  |  |
+
+
+### Volumes
+
+Following volumes are exposed
+
+| Path | Notes  |
+| ---  | ---    |
+| "/var/jenkins_home" | Jenkins home directory|
+| "/var/jenkins_conf" | Jenkins configuration directory |
+
+### Ports
+
+Please refer to available ports specified by aemdesign/jenkins-base
+
 ### Included Packages
 
 Following is the list of packages included
