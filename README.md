@@ -81,6 +81,6 @@ Following is the list of packages included
 
 ### Usage
 
-> docker run -v jenkins_home:/var/jenkins_home -v $(pwd)/casc_configs:/var/jenkins_conf -p 8080:8080 aemdesign/jenkins-base
+> docker run -v jenkins_home:/var/jenkins_home -v $(pwd)/praqma-jenkins-casc/casc_configs:/var/jenkins_conf -p 8080:8080 aemdesign/jenkins-base
 
-and a sample casc_configs can be found in https://github.com/Praqma/praqma-jenkins-casc
+and praqma-jenkins-casc contains sample CASC configurations, it can be cloned from https://github.com/Praqma/praqma-jenkins-casc
